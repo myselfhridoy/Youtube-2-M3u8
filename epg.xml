@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tv generator-info-name="YouTube Live EPG Generator" date="20260619171102 ">
+<tv generator-info-name="YouTube Live EPG Generator" date="20260620020859 ">
   <channel id="UCt4t-jeY85JegMlZ-E5UWtA">
     <display-name>Aaj Tak</display-name>
     <icon src="logos/UCt4t-jeY85JegMlZ-E5UWtA.jpg"/>
   </channel>
-  <programme start="20260619171102 +0000" stop="20260619181102 +0000" channel="UCt4t-jeY85JegMlZ-E5UWtA">
-    <title>Aaj Tak LIVE TV: Black and White | Ayodhya Ram Mandir | US Iran Peace Deal | PM | NEET | Hindi News 2026-06-19 17:10</title>
+  <programme start="20260620020859 +0000" stop="20260620030859 +0000" channel="UCt4t-jeY85JegMlZ-E5UWtA">
+    <title>Aaj Tak LIVE TV: Ayodhya Ram Mandir | US Iran Peace Deal | TMC Vs BJP | PM Modi | NEET | Hindi News 2026-06-20 02:07</title>
     <desc>Live YouTube stream from Aaj Tak</desc>
     <category>Live</category>
   </programme>
@@ -13,8 +13,8 @@
     <display-name>ABP NEWS</display-name>
     <icon src="logos/UCRWFSbif-RFENbBrSiez1DA.jpg"/>
   </channel>
-  <programme start="20260619171102 +0000" stop="20260619181102 +0000" channel="UCRWFSbif-RFENbBrSiez1DA">
-    <title>ABP NEWS LIVE: Ayodhya Ram Mandir | Iran US Peace Deal | Shivsena | PM Modi | NEET | Hindi News 2026-06-19 17:10</title>
+  <programme start="20260620020859 +0000" stop="20260620030859 +0000" channel="UCRWFSbif-RFENbBrSiez1DA">
+    <title>ABP NEWS LIVE: PM Modi Bengal-Odisha Visit | Ram Mandir | NEET Exam | Shiv Sena | Trump | IND Vs AFG 2026-06-20 02:08</title>
     <desc>Live YouTube stream from ABP NEWS</desc>
     <category>Live</category>
   </programme>
@@ -22,8 +22,8 @@
     <display-name>BIGTV24X7</display-name>
     <icon src="logos/UClFe5TPbW1MVrOPpbNHTDoQ.jpg"/>
   </channel>
-  <programme start="20260619171102 +0000" stop="20260619181102 +0000" channel="UClFe5TPbW1MVrOPpbNHTDoQ">
-    <title>BigTV Official Live | Malayalam News Live | BIG TV MALAYALAM | VD Satheesan | Kerala Budget 2026 2026-06-19 17:10</title>
+  <programme start="20260620020859 +0000" stop="20260620030859 +0000" channel="UClFe5TPbW1MVrOPpbNHTDoQ">
+    <title>BigTV Official Live | Malayalam News Live | BIG TV MALAYALAM | VD Satheesan | Kerala Budget 2026 2026-06-20 02:08</title>
     <desc>Live YouTube stream from BIGTV24X7</desc>
     <category>Live</category>
   </programme>
@@ -31,8 +31,8 @@
     <display-name>cricketcomau</display-name>
     <icon src="logos/UCkBY0aHJP9BwjZLDYxAQrKg.jpg"/>
   </channel>
-  <programme start="20260619171102 +0000" stop="20260619181102 +0000" channel="UCkBY0aHJP9BwjZLDYxAQrKg">
-    <title>Cricket Gold - 24/7 LIVE Channel 2026-06-19 17:10</title>
+  <programme start="20260620020859 +0000" stop="20260620030859 +0000" channel="UCkBY0aHJP9BwjZLDYxAQrKg">
+    <title>Cricket Gold - 24/7 LIVE Channel 2026-06-20 02:08</title>
     <desc>Live YouTube stream from cricketcomau</desc>
     <category>Live</category>
   </programme>
@@ -40,8 +40,8 @@
     <display-name>Rajasthan Patrika</display-name>
     <icon src="logos/UCWk-7Yosyvzln9ZzJg8BvVg.jpg"/>
   </channel>
-  <programme start="20260619171102 +0000" stop="20260619181102 +0000" channel="UCWk-7Yosyvzln9ZzJg8BvVg">
-    <title>Patrika TV LIVE | Rajasthan Patrika | Super Fast News LIVE | Top News LIVE | Aaj Ki Taaza Khabar 2026-06-19 17:10</title>
+  <programme start="20260620020859 +0000" stop="20260620030859 +0000" channel="UCWk-7Yosyvzln9ZzJg8BvVg">
+    <title>Patrika TV LIVE | Rajasthan Patrika | Super Fast News LIVE | Top News LIVE | Aaj Ki Taaza Khabar 2026-06-20 02:08</title>
     <desc>Live YouTube stream from Rajasthan Patrika</desc>
     <category>Live</category>
   </programme>
@@ -49,8 +49,8 @@
     <display-name>ABC News</display-name>
     <icon src="logos/UCBi2mrWuNuyYy4gbM6fU18Q.jpg"/>
   </channel>
-  <programme start="20260619171102 +0000" stop="20260619181102 +0000" channel="UCBi2mrWuNuyYy4gbM6fU18Q">
-    <title>LIVE: ABC News Live - Friday, June 19 | ABC News 2026-06-19 17:10</title>
+  <programme start="20260620020859 +0000" stop="20260620030859 +0000" channel="UCBi2mrWuNuyYy4gbM6fU18Q">
+    <title>LIVE: ABC News Live - Friday, June 19 | ABC News 2026-06-20 02:08</title>
     <desc>Live YouTube stream from ABC News</desc>
     <category>Live</category>
   </programme>
@@ -58,8 +58,8 @@
     <display-name>Hindustan Times</display-name>
     <icon src="logos/UCm7lHFkt2yB_WzL67aruVBQ.jpg"/>
   </channel>
-  <programme start="20260619171102 +0000" stop="20260619181102 +0000" channel="UCm7lHFkt2yB_WzL67aruVBQ">
-    <title>LIVE | COVID Origins Bombshell? Tulsi Gabbard Alleges Fauci Funded Wuhan Lab Research In China 2026-06-19 17:10</title>
+  <programme start="20260620020859 +0000" stop="20260620030859 +0000" channel="UCm7lHFkt2yB_WzL67aruVBQ">
+    <title>London Train Crash LIVE | One Dead, Several Injured After Two Trains Collide Near Bedford 2026-06-20 02:08</title>
     <desc>Live YouTube stream from Hindustan Times</desc>
     <category>Live</category>
   </programme>
@@ -67,8 +67,8 @@
     <display-name>LiveNOW from FOX</display-name>
     <icon src="logos/UCJg9wBPyKMNA5sRDnvzmkdg.jpg"/>
   </channel>
-  <programme start="20260619171102 +0000" stop="20260619181102 +0000" channel="UCJg9wBPyKMNA5sRDnvzmkdg">
-    <title>LIVE NEWS: Israel &amp; Hezbollah agree to ceasefire, US-Iran meeting canceled, US men's World Cup match 2026-06-19 17:10</title>
+  <programme start="20260620020859 +0000" stop="20260620030859 +0000" channel="UCJg9wBPyKMNA5sRDnvzmkdg">
+    <title>LIVE NEWS: US-Iran meeting canceled, Trump's new $400M AF1, USMNT advances to knockout stage &amp; more 2026-06-20 02:08</title>
     <desc>Live YouTube stream from LiveNOW from FOX</desc>
     <category>Live</category>
   </programme>
@@ -76,8 +76,8 @@
     <display-name>NewsX Live</display-name>
     <icon src="logos/UCytSP0M0Jdnw6qIy3Y-nTig.jpg"/>
   </channel>
-  <programme start="20260619171102 +0000" stop="20260619181102 +0000" channel="UCytSP0M0Jdnw6qIy3Y-nTig">
-    <title>LIVE: TELEGRAM VS UOI | NEET CONTROVERSY | US-IRAN DEAL |  FIFA WORLD CUP | MUMBAI POLITICS | NEWSX 2026-06-19 17:10</title>
+  <programme start="20260620020859 +0000" stop="20260620030859 +0000" channel="UCytSP0M0Jdnw6qIy3Y-nTig">
+    <title>LIVE: TELEGRAM VS UOI | NEET CONTROVERSY | US-IRAN DEAL |  FIFA WORLD CUP | MUMBAI POLITICS | NEWSX 2026-06-20 02:08</title>
     <desc>Live YouTube stream from NewsX Live</desc>
     <category>Live</category>
   </programme>
@@ -85,8 +85,8 @@
     <display-name>NewsX World</display-name>
     <icon src="logos/UCvu9pKtF3Y8KaJVD-WMiOrg.jpg"/>
   </channel>
-  <programme start="20260619171102 +0000" stop="20260619181102 +0000" channel="UCvu9pKtF3Y8KaJVD-WMiOrg">
-    <title>LIVE: Israeli army says Hezbollah strikes to continue 'as needed' 2026-06-19 17:11</title>
+  <programme start="20260620020859 +0000" stop="20260620030859 +0000" channel="UCvu9pKtF3Y8KaJVD-WMiOrg">
+    <title>Mexico vs South Korea LIVE : Mexico Fans Flood Los Angeles Streets After Dramatic South Korea Win 2026-06-20 02:08</title>
     <desc>Live YouTube stream from NewsX World</desc>
     <category>Live</category>
   </programme>
