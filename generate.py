@@ -135,7 +135,6 @@ class YouTubePlaylistGenerator:
         """Get stream URL and metadata with better live detection and geo-bypass"""
         
         # First, try to get channel name without full extraction to detect country
-        # কুকি যুক্ত করা হলো যেন বট ডিটেকশন এড়ানো যায়
         try:
             init_opts = {
                 'quiet': True, 
@@ -149,7 +148,6 @@ class YouTubePlaylistGenerator:
         except Exception as e:
             channel_name = ''
             
-        # যদি চ্যানেল নাম না পাওয়া যায়, তবে URL কেই চ্যানেল নাম হিসেবে ধরে কান্ট্রি বের করবে
         detect_text = channel_name if channel_name else url
         country = self.detect_channel_country(detect_text)
         print(f"  🌍 Using geo-bypass for country: {country}")
@@ -166,7 +164,7 @@ class YouTubePlaylistGenerator:
             'retries': 5,
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android', 'ios', 'web'], # web যোগ করা হলো
+                    'player_client': ['android', 'ios'], # 'web' সরানো হয়েছে বট ডিটেকশন এড়াতে
                     'live_from_start': True,
                     'skip': ['webpage', 'configs']
                 }
