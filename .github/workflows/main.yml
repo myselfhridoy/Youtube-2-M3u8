@@ -74,11 +74,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # পরিবর্তনগুলো স্টেজ করুন
-          git add streams*.m3u8 epg.xml stats.json logos/ channels/ 2>/dev/null || true
+          # সব পরিবর্তন স্টেজ করুন
+          git add .
 
-          # কোনো পরিবর্তন আছে কিনা চেক করুন
-          if git diff --cached --quiet; then
+          # যদি কোনো পরিবর্তন না থাকে তবে বের হয়ে যান
+          if git diff-index --quiet HEAD --; then
             echo "No changes to commit"
             exit 0
           fi
@@ -86,11 +86,10 @@ jobs:
           # কমিট করুন
           git commit -m "Update playlist - $(date -u +'%Y-%m-%d %H:%M UTC')"
 
-          # পুশ করার আগে সার্ভারের নতুন চেঞ্জগুলো নিয়ে আসুন (Rebase)
-          # এটি রিজেকশন এড়াতে সাহায্য করবে
-          git pull --rebase origin main
+          # পুল করার সময় কোনো unstaged ফাইল থাকলে তা অটো-স্ট্যাশ করে নেবে
+          git pull --rebase --autostash origin main
 
-          # ফাইনালি পুশ করুন
+          # পুশ করুন
           git push origin main
 
       - name: Cleanup sensitive files
