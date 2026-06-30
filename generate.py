@@ -52,18 +52,24 @@ class YouTubePlaylistGenerator:
         return safe.lower()
     
     def detect_channel_country(self, channel_name):
-        """Detect which country the channel belongs to based on name"""
+        """Detect which country the channel belongs to based on name or URL"""
         channel_name_lower = channel_name.lower()
         
-        # NIGERIAN CHANNELS - Expanded list with specific channel names
+        # BANGLADESHI CHANNELS
+        bangladeshi_keywords = [
+            'jamuna', 'somoy', 'channel i', 'atn', 'dbc', 'independent', 
+            'dhaka', 'bangla', 'bd', 'ekattor', 'rtv', 'ntv'
+        ]
+        
+        for keyword in bangladeshi_keywords:
+            if keyword in channel_name_lower:
+                print(f"  🌍 Found Bangladeshi keyword: '{keyword}', using BD")
+                return 'BD'
+
+        # NIGERIAN CHANNELS
         nigerian_keywords = [
-            # Country names
             'nigeria', 'nigerian', 'lagos', 'abuja', 'naija', '9ja',
-            
-            # Specific Nigerian channels
-            'tvc news nigeria',
-            'channels television',
-            'arise news',
+            'tvc news nigeria', 'channels television', 'arise news',
             'nta', 'nitv', 'ait', 'silverbird', 'wazobia',
             'cool fm', 'galaxy tv', 'bcos tv', 'mitv',
             'plus tv nigeria', 'soundcity', 'hip tv',
@@ -78,10 +84,7 @@ class YouTubePlaylistGenerator:
         
         # GHANAIAN CHANNELS
         ghanaian_keywords = [
-            # Country names
             'maxico', 'ghanaian', 'accra', 'kumasi',
-            
-            # Specific Ghanaian channels
             'Windies Cricket', 'joy fm', 'adom tv', 'adom fm',
             'tv3 ghana', 'tv3', 'cititv', 'citizen tv',
             'utv ghana', 'utv', 'metro tv ghana', 'metro tv',
@@ -93,18 +96,7 @@ class YouTubePlaylistGenerator:
             if keyword in channel_name_lower:
                 print(f"  🌍 Found Ghanaian keyword: '{keyword}', using MX")
                 return 'MX'
-
-                # BANGLADESHI CHANNELS
-        bangladeshi_keywords = [
-            'jamuna', 'somoy', 'channel i', 'atn', 'dbc', 'independent', 
-            'dhaka', 'bangla', 'bd'
-        ]
         
-        for keyword in bangladeshi_keywords:
-            if keyword in channel_name_lower:
-                print(f"  🌍 Found Bangladeshi keyword: '{keyword}', using BD")
-                return 'BD'
-
         # Default to UK if no match
         print(f"  🌍 No country detected, using default: UK")
         return 'UK'
@@ -143,19 +135,28 @@ class YouTubePlaylistGenerator:
         """Get stream URL and metadata with better live detection and geo-bypass"""
         
         # First, try to get channel name without full extraction to detect country
+        # কুকি যুক্ত করা হলো যেন বট ডিটেকশন এড়ানো যায়
         try:
-            with yt_dlp.YoutubeDL({'quiet': True, 'no_warnings': True}) as ydl:
+            init_opts = {
+                'quiet': True, 
+                'no_warnings': True, 
+                'cookies': self.cookies_file,
+                'nocheckcertificate': True
+            }
+            with yt_dlp.YoutubeDL(init_opts) as ydl:
                 info = ydl.extract_info(url, download=False, process=False)
                 channel_name = info.get('channel', '') if info else ''
-        except:
+        except Exception as e:
             channel_name = ''
-        
-        # Detect country from channel name
-        country = self.detect_channel_country(channel_name)
+            
+        # যদি চ্যানেল নাম না পাওয়া যায়, তবে URL কেই চ্যানেল নাম হিসেবে ধরে কান্ট্রি বের করবে
+        detect_text = channel_name if channel_name else url
+        country = self.detect_channel_country(detect_text)
         print(f"  🌍 Using geo-bypass for country: {country}")
         
         ydl_opts = {
             'cookies': self.cookies_file,
+            'nocheckcertificate': True,
             'quiet': True,
             'no_warnings': True,
             'socket_timeout': 30,
@@ -165,7 +166,7 @@ class YouTubePlaylistGenerator:
             'retries': 5,
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android', 'ios'],
+                    'player_client': ['android', 'ios', 'web'], # web যোগ করা হলো
                     'live_from_start': True,
                     'skip': ['webpage', 'configs']
                 }
@@ -307,7 +308,7 @@ class YouTubePlaylistGenerator:
             return None
     
     def generate_individual_playlists(self, channels_data):
-        """Generate individual M3U8 files for each channel with validation and preserve previous channels"""
+        """Generate individual M3U8 files for each channel"""
         individual_channels = []
         live_channels_found = False
         
@@ -378,7 +379,6 @@ class YouTubePlaylistGenerator:
             else:
                 print(f"  ⚫ OFFLINE: {filename} (keeping existing file)")
         
-        # If NO live channels found, try to load previous channels.json
         if not live_channels_found:
             print("⚠️ No live channels detected in this run")
             try:
@@ -412,8 +412,7 @@ class YouTubePlaylistGenerator:
         return individual_channels
     
     def generate_channels_html(self, channels):
-        """Generate HTML index page with channels directly embedded"""
-        
+        """Generate HTML index page"""
         channel_items = ""
         for ch in channels:
             filename = ch['file'].replace('channels/', '')
@@ -443,7 +442,7 @@ class YouTubePlaylistGenerator:
             channel_items = """
         <div style="text-align: center; padding: 40px; background: #f8f9fa; border-radius: 12px;">
             <p style="font-size: 1.2em; color: #666;">📡 No channels available at the moment</p>
-            <p style="color: #999; margin-top: 10px;">Check back after the next workflow run (every 6 hours)</p>
+            <p style="color: #999; margin-top: 10px;">Check back after the next workflow run</p>
         </div>
         """
         
@@ -491,93 +490,25 @@ class YouTubePlaylistGenerator:
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             transition: transform 0.2s;
         }}
-        .channel-card:hover {{ transform: translateY(-2px); }}
-        .channel-name {{
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }}
-        .channel-country {{
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 5px;
-        }}
-        .channel-quality {{
-            color: #4CAF50;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-        }}
+        .channel-name {{ font-size: 1.2em; font-weight: bold; margin-bottom: 5px; }}
         .btn {{
-            display: inline-block;
-            background: #4CAF50;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            text-decoration: none;
-            margin-right: 8px;
-            font-size: 0.9em;
-            border: none;
-            cursor: pointer;
+            display: inline-block; background: #4CAF50; color: white;
+            padding: 8px 16px; border-radius: 6px; text-decoration: none;
+            margin-right: 8px; border: none; cursor: pointer;
         }}
-        .btn:hover {{ background: #45a049; }}
-        .btn-outline {{
-            background: transparent;
-            border: 2px solid #4CAF50;
-            color: #4CAF50;
-        }}
-        .btn-outline:hover {{
-            background: #4CAF50;
-            color: white;
-        }}
-        .channel-url {{
-            margin-top: 10px;
-            font-size: 0.8em;
-            color: #666;
-        }}
-        .footer {{
-            background: #f8f9fa;
-            padding: 20px;
-            text-align: center;
-            color: #666;
-            border-top: 1px solid #e0e0e0;
-        }}
-        code {{
-            background: #f5f5f5;
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-size: 0.9em;
-        }}
-        @media (max-width: 768px) {{
-            .channel-grid {{ grid-template-columns: 1fr; }}
-        }}
+        .btn-outline {{ background: transparent; border: 2px solid #4CAF50; color: #4CAF50; }}
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>📺 Individual Channel Streams</h1>
-            <p>Direct M3U8 links for each channel</p>
         </div>
-        
         <div class="content">
-            <div style="margin-bottom: 20px;">
-                <a href="../streams.m3u8" class="btn">📋 Main Playlist</a>
-                <a href="../streams_hd.m3u8" class="btn">🎥 HD Playlist</a>
-                <a href="../streams_mobile.m3u8" class="btn">📱 Mobile Playlist</a>
-                <a href="../epg.xml" class="btn">📺 EPG Guide</a>
-            </div>
-            
             <h2 style="margin-bottom: 20px;">Available Channels ({len(channels)})</h2>
             <div class="channel-grid">
                 {channel_items}
             </div>
-        </div>
-        
-        <div class="footer">
-            <p>🔄 Refreshes every 6 hours • URLs expire ~6 hours</p>
-            <p>⏰ Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M UTC')}</p>
-            <p>🔗 <a href="https://github.com/uticap/Youtube-to-M3u8">GitHub Repository</a></p>
         </div>
     </div>
 </body>
@@ -598,25 +529,21 @@ class YouTubePlaylistGenerator:
         for channel in channels_data:
             if channel.get('status') == 'live':
                 channel_elem = ET.SubElement(tv, "channel", {"id": channel['channel_id']})
-                
                 display_name = ET.SubElement(channel_elem, "display-name")
                 display_name.text = channel['name']
                 
                 if channel.get('logo'):
-                    icon = ET.SubElement(channel_elem, "icon", {"src": channel['logo']})
+                    ET.SubElement(channel_elem, "icon", {"src": channel['logo']})
                 
                 programme = ET.SubElement(tv, "programme", {
                     "start": datetime.now().strftime("%Y%m%d%H%M%S +0000"),
                     "stop": (datetime.now() + timedelta(hours=1)).strftime("%Y%m%d%H%M%S +0000"),
                     "channel": channel['channel_id']
                 })
-                
                 title = ET.SubElement(programme, "title")
                 title.text = channel.get('title', 'Live Stream')
-                
                 desc = ET.SubElement(programme, "desc")
                 desc.text = f"Live YouTube stream from {channel['name']}"
-                
                 category = ET.SubElement(programme, "category")
                 category.text = "Live"
         
@@ -626,40 +553,22 @@ class YouTubePlaylistGenerator:
         
         with open('epg.xml', 'w', encoding='utf-8') as f:
             f.write(pretty_xml)
-        
-        print(f"✅ EPG generated with {len(channels_data)} channels")
     
     def generate_playlists(self, all_channels):
-        """Generate multiple playlists (main, HD, mobile, audio)"""
-        
-        playlists = {
-            'main': [],
-            'hd': [],
-            'mobile': [],
-            'audio': []
-        }
-        
+        """Generate multiple playlists"""
+        playlists = {'main': [], 'hd': [], 'mobile': [], 'audio': []}
         headers = [
-            "#EXTM3U",
-            "#EXT-X-VERSION:3",
+            "#EXTM3U", "#EXT-X-VERSION:3",
             f"# Generated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}",
-            f"# Total channels: {len(all_channels)}",
-            f"# Individual channels: https://uticap.github.io/Youtube-to-M3u8/channels/",
-            ""
+            f"# Total channels: {len(all_channels)}", ""
         ]
         
-        for playlist_name in playlists:
-            playlists[playlist_name] = headers.copy()
+        for name in playlists: playlists[name] = headers.copy()
         
         stats = {
-            'total': len(all_channels),
-            'live': 0,
-            'offline': 0,
-            'error': 0,
+            'total': len(all_channels), 'live': 0, 'offline': 0, 'error': 0,
             'qualities': {'1080p': 0, '720p': 0, '480p': 0, 'other': 0},
-            'by_category': {},
-            'by_country': {},
-            'individual_channels': []
+            'by_category': {}, 'by_country': {}, 'individual_channels': []
         }
         
         for channel in all_channels:
@@ -668,190 +577,61 @@ class YouTubePlaylistGenerator:
             country = channel.get('country', 'Unknown')
             
             stats['by_country'][country] = stats['by_country'].get(country, 0) + 1
-            
-            category = 'General'
-            if 'news' in channel_name.lower():
-                category = 'News'
-            elif 'sport' in channel_name.lower():
-                category = 'Sports'
-            elif 'entertain' in channel_name.lower():
-                category = 'Entertainment'
-            
+            category = 'News' if 'news' in channel_name.lower() else 'General'
             stats['by_category'][category] = stats['by_category'].get(category, 0) + 1
-            
             logo_attr = f' tvg-logo="{channel["logo"]}"' if channel.get('logo') else ''
             
             if channel.get('status') == 'live':
                 stats['live'] += 1
-                
-                height = 0
-                for stream_data in channel.get('streams', {}).values():
-                    height = max(height, stream_data.get('height', 0))
-                
-                if height >= 1080:
-                    stats['qualities']['1080p'] += 1
-                elif height >= 720:
-                    stats['qualities']['720p'] += 1
-                elif height >= 480:
-                    stats['qualities']['480p'] += 1
-                else:
-                    stats['qualities']['other'] += 1
-                
-                main_stream = channel.get('streams', {}).get('hd', {})
-                if not main_stream:
-                    for s in channel.get('streams', {}).values():
-                        main_stream = s
-                        break
+                main_stream = list(channel.get('streams', {}).values())[0] if channel.get('streams') else None
                 
                 if main_stream:
-                    quality_tag = main_stream.get('quality_tag', '')
-                    playlists['main'].append(
-                        f'#EXTINF:-1 tvg-id="{channel_id}"{logo_attr} tvg-name="{channel_name}" '
-                        f'group-title="{category}",{channel_name} [{quality_tag}]'
-                    )
-                    playlists['main'].append(main_stream['url'])
-                    playlists['main'].append("")
-                    
-                    safe_name = self.safe_filename(channel_name)
-                    stats['individual_channels'].append({
-                        'name': channel_name,
-                        'file': f"channels/{safe_name}.m3u8",
-                        'quality': quality_tag
-                    })
-                
-                for profile_name in ['hd', 'mobile']:
-                    if profile_name in channel.get('streams', {}):
-                        stream = channel['streams'][profile_name]
-                        suffix = QUALITY_PROFILES[profile_name]['suffix']
-                        playlists[profile_name].append(
-                            f'#EXTINF:-1 tvg-id="{channel_id}"{logo_attr} tvg-name="{channel_name}" '
-                            f'group-title="{category}",{channel_name} {suffix}'
-                        )
-                        playlists[profile_name].append(stream['url'])
-                        playlists[profile_name].append("")
-            
+                    q_tag = main_stream.get('quality_tag', '')
+                    playlists['main'].extend([
+                        f'#EXTINF:-1 tvg-id="{channel_id}"{logo_attr} tvg-name="{channel_name}" group-title="{category}",{channel_name} [{q_tag}]',
+                        main_stream['url'], ""
+                    ])
             elif channel.get('status') == 'offline':
                 stats['offline'] += 1
-                fallback_url = f"https://www.youtube.com/watch?v={channel['video_id']}"
-                
-                for playlist_name in playlists:
-                    playlists[playlist_name].append(
-                        f'#EXTINF:-1 tvg-id="{channel_id}"{logo_attr} tvg-name="{channel_name}" '
-                        f'group-title="{category}",{channel_name} [Offline]'
-                    )
-                    playlists[playlist_name].append(fallback_url)
-                    playlists[playlist_name].append("")
-            
             else:
                 stats['error'] += 1
-                for playlist_name in playlists:
-                    playlists[playlist_name].append(
-                        f'#EXTINF:-1 tvg-id="{channel_id}"{logo_attr} tvg-name="{channel_name}" '
-                        f'group-title="{category}",{channel_name} [Error]'
-                    )
-                    playlists[playlist_name].append(f"https://youtube.com/watch?v={channel.get('video_id', '')}")
-                    playlists[playlist_name].append("")
-        
-        summary = [
-            "",
-            f"# Summary: {stats['live']}/{stats['total']} streams active",
-            f"# Quality: {stats['qualities']['1080p']}x1080p, {stats['qualities']['720p']}x720p, {stats['qualities']['480p']}x480p",
-            f"# Categories: {', '.join([f'{k}:{v}' for k, v in stats['by_category'].items()])}",
-            f"# Countries: {', '.join([f'{k}:{v}' for k, v in stats['by_country'].items()])}",
-            f"# Individual channels: https://uticap.github.io/Youtube-to-M3u8/channels/",
-            f"# Updated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}"
-        ]
-        
-        for playlist_name in playlists:
-            playlists[playlist_name].extend(summary)
-        
-        playlist_files = {
-            'main': 'streams.m3u8',
-            'hd': 'streams_hd.m3u8',
-            'mobile': 'streams_mobile.m3u8',
-            'audio': 'streams_audio.m3u8'
-        }
-        
-        for name, filename in playlist_files.items():
-            with open(filename, 'w', encoding='utf-8') as f:
-                f.write('\n'.join(playlists[name]))
-            print(f"✅ Saved: {filename}")
-        
-        with open('stats.json', 'w') as f:
-            json.dump(stats, f, indent=2)
-        
+                
+        for name, filename in zip(playlists.keys(), ['streams.m3u8', 'streams_hd.m3u8', 'streams_mobile.m3u8', 'streams_audio.m3u8']):
+            with open(filename, 'w', encoding='utf-8') as f: f.write('\n'.join(playlists[name]))
+            
+        with open('stats.json', 'w') as f: json.dump(stats, f, indent=2)
         return stats, playlists
 
 def main():
     if not os.path.exists('streams.txt'):
         print("❌ streams.txt not found")
         return
-    
     with open('streams.txt', 'r') as f:
         lines = [l.strip() for l in f if l.strip() and not l.startswith('#')]
     
     if not lines:
         print("⚠️ No streams found")
         return
-    
-    print(f"📡 Processing {len(lines)} channels...")
-    print(f"🌍 Geo-bypass enabled for multiple countries (NG, GH, US, etc.)")
-    
+        
     generator = YouTubePlaylistGenerator()
-    
     channels_data = []
+    
     for i, url in enumerate(lines, 1):
         print(f"\n📺 [{i}/{len(lines)}] Processing: {url}")
         time.sleep(random.uniform(2, 5))
-        
         channel_info = generator.get_stream_info(url)
         if channel_info:
             channels_data.append(channel_info)
+            status_text = "LIVE" if channel_info['status'] == 'live' else channel_info['status'].upper()
+            print(f"  Status: {status_text} | Country: {channel_info.get('country')}")
             
-            if channel_info['status'] == 'live':
-                streams = list(channel_info.get('streams', {}).keys())
-                country = channel_info.get('country', 'Unknown')
-                print(f"  ✅ LIVE ({country}) - Qualities: {', '.join(streams)}")
-            else:
-                print(f"  ⚠️ {channel_info['status'].upper()}")
-    
-    print("\n📋 Generating EPG...")
     generator.generate_epg(channels_data)
-    
-    print("\n🎬 Generating playlists...")
     stats, playlists = generator.generate_playlists(channels_data)
-    
-    print("\n📺 Generating individual channel playlists...")
     individual_channels = generator.generate_individual_playlists(channels_data)
-    
     generator.save_cache()
     
-    print(f"\n{'='*50}")
-    print(f"📊 FINAL STATISTICS:")
-    print(f"   Live: {stats['live']}/{stats['total']}")
-    print(f"   Offline: {stats['offline']}")
-    print(f"   Errors: {stats['error']}")
-    print(f"\n📊 Quality Distribution:")
-    for quality, count in stats['qualities'].items():
-        if count > 0:
-            print(f"   {quality}: {count}")
-    print(f"\n📊 Categories:")
-    for category, count in stats['by_category'].items():
-        print(f"   {category}: {count}")
-    print(f"\n📊 Countries:")
-    for country, count in stats['by_country'].items():
-        print(f"   {country}: {count}")
-    print(f"\n📁 Generated Files:")
-    print("   - streams.m3u8 (Main playlist)")
-    print("   - streams_hd.m3u8 (HD only)")
-    print("   - streams_mobile.m3u8 (Mobile quality)")
-    print("   - streams_audio.m3u8 (Audio only)")
-    print("   - epg.xml (TV Guide)")
-    print("   - stats.json (Detailed statistics)")
-    print(f"   - channels/ (Individual channel files - {len(individual_channels)} files)")
-    print(f"\n🌐 Individual Channels URL:")
-    print(f"   https://uticap.github.io/Youtube-to-M3u8/channels/")
-    print(f"{'='*50}")
+    print(f"\n{'='*50}\n📊 FINAL STATISTICS:")
+    print(f"   Live: {stats['live']}/{stats['total']}\n{'='*50}")
 
 if __name__ == "__main__":
     main()
