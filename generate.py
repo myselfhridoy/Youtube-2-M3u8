@@ -93,7 +93,18 @@ class YouTubePlaylistGenerator:
             if keyword in channel_name_lower:
                 print(f"  🌍 Found Ghanaian keyword: '{keyword}', using MX")
                 return 'MX'
+
+                # BANGLADESHI CHANNELS
+        bangladeshi_keywords = [
+            'jamuna', 'somoy', 'channel i', 'atn', 'dbc', 'independent', 
+            'dhaka', 'bangla', 'bd'
+        ]
         
+        for keyword in bangladeshi_keywords:
+            if keyword in channel_name_lower:
+                print(f"  🌍 Found Bangladeshi keyword: '{keyword}', using BD")
+                return 'BD'
+
         # Default to UK if no match
         print(f"  🌍 No country detected, using default: UK")
         return 'UK'
