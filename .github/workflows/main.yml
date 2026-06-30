@@ -31,7 +31,9 @@ jobs:
 
       - name: Setup Python & dependencies
         run: |
-          pip install --upgrade pip yt-dlp requests
+          pip install --upgrade pip requests
+          # yt-dlp এর লেটেস্ট প্রি-রিলিজ (Nightly) ভার্সন ইনস্টল করা হচ্ছে বট ডিটেকশন এড়াতে
+          pip install -U --pre "yt-dlp[default]"
           echo "yt-dlp: $(yt-dlp --version)"
 
       - name: Setup Cloudflare WARP
@@ -42,6 +44,8 @@ jobs:
           curl -fsSL https://github.com/ViRb3/wgcf/releases/download/v2.2.22/wgcf_2.2.22_linux_amd64 -o wgcf
           chmod +x wgcf
           sudo mv wgcf /usr/local/bin/
+          # আগের ক্র্যাশ করা ফাইল মুছে ফেলা হচ্ছে
+          rm -f wgcf-account.toml wgcf-profile.conf 
           wgcf register --accept-tos
           wgcf generate
           sudo mkdir -p /etc/wireguard
