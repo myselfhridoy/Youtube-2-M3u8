@@ -1,7 +1,12 @@
 #EXTM3U
 #EXT-X-VERSION:3
+# Channel: Jamuna TV
+# ID: UCN6sm8iHiPd0cnoUardDAnw
+# Quality: 720p
+# Country: BD
+# Status: LIVE (as of 22:47 UTC)
 # Generated: 2026-06-30 22:47:18 UTC
-# Total channels: 1
+# URL expires: ~03:47 UTC (refresh playlist if expired)
 
-#EXTINF:-1 tvg-id="UCN6sm8iHiPd0cnoUardDAnw" tvg-logo="logos/UCN6sm8iHiPd0cnoUardDAnw.jpg" tvg-name="Jamuna TV" group-title="General",Jamuna TV [720p]
+#EXTINF:-1 tvg-id="UCN6sm8iHiPd0cnoUardDAnw" tvg-logo="logos/UCN6sm8iHiPd0cnoUardDAnw.jpg" tvg-name="Jamuna TV" group-title="Individual",Jamuna TV [720p] 🔴 LIVE
 https://manifest.googlevideo.com/api/manifest/hls_playlist/expire/1782881236/ei/dEdEaqqxLLvJir4P-ZvTIA/ip/2a09:bac5:d2a1:96::f:3d2/id/hOX0_kkHpmI.1/itag/95/source/yt_live_broadcast/requiressl/yes/ratebypass/yes/live/1/sgoap/gir%3Dyes%3Bitag%3D140/sgovp/gir%3Dyes%3Bitag%3D136/rqh/1/hls_chunk_host/rr2---sn-qja5m5-5g.googlevideo.com/xpc/EgVo2aDSNQ%3D%3D/playlist_duration/30/manifest_duration/30/gcr/us/ss/1/ssa/1/bui/ARmQxEXZQnK32cGE_JCkuz1WtOWJMTthEZhy_KX-sgzr3_m5RMmziMbeSMgS_fzShfgtsbouZKDMFBEV/spc/SQ-umnaC1_GbukTxpQhe5apvh242HxjItGQ5FzFSiJvAtBvgtSyf5SEuluNLxJtP/vprv/1/reg/0/playlist_type/DVR/met/1782859637,/mh/ap/mm/44/mn/sn-qja5m5-5g/ms/lva/mv/u/mvi/2/pl/40/rms/lva,lva/dover/11/pacing/0/keepalive/yes/fexp/51565115,52017146/mt/1782859162/sparams/expire,ei,ip,id,itag,source,requiressl,ratebypass,live,sgoap,sgovp,rqh,xpc,playlist_duration,manifest_duration,gcr,ss,ssa,bui,spc,vprv,reg,playlist_type/sig/AHEqNM4wRQIhAMBMgZ-JpKkAbk-dRCHI6svGsj9rU6mBAT-r4UxRycfNAiA1nlYB2O9yI_WV9RHu-_gjv42YLdoo0BarT7yTrprINw%3D%3D/lsparams/hls_chunk_host,met,mh,mm,mn,ms,mv,mvi,pl,rms/lsig/APaTxxMwRgIhANnP3LgoMowNb3lXFo0TfDRrgMwD-7GEOMDIYWcleAMPAiEA_b95jazCN1w7tVTgU0NNf2WY7EB8ZhrHedu5M-oyZwU%3D/playlist/index.m3u8

@@ -1,6 +1,6 @@
 {
-  "total": 0,
-  "live": 0,
+  "total": 1,
+  "live": 1,
   "offline": 0,
   "error": 0,
   "qualities": {
@@ -9,7 +9,11 @@
     "480p": 0,
     "other": 0
   },
-  "by_category": {},
-  "by_country": {},
+  "by_category": {
+    "General": 1
+  },
+  "by_country": {
+    "BD": 1
+  },
   "individual_channels": []
 }
