@@ -132,7 +132,7 @@ class YouTubePlaylistGenerator:
             return None
     
     def get_stream_info(self, url):
-        """Get stream URL and metadata with better live detection and geo-bypass"""
+        """Get stream URL and metadata with TV client for relaxed IP binding"""
         
         # First, try to get channel name without full extraction to detect country
         try:
@@ -150,7 +150,7 @@ class YouTubePlaylistGenerator:
             
         detect_text = channel_name if channel_name else url
         country = self.detect_channel_country(detect_text)
-        print(f"  🌍 Using geo-bypass for country: {country}")
+        print(f"  🌍 Detected country for metadata: {country}")
         
         ydl_opts = {
             'cookies': self.cookies_file,
@@ -164,22 +164,13 @@ class YouTubePlaylistGenerator:
             'retries': 5,
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android', 'ios'], # 'web' সরানো হয়েছে বট ডিটেকশন এড়াতে
+                    # 'tv' ক্লায়েন্ট ব্যবহার করা হলো IP Lock এড়ানোর জন্য
+                    'player_client': ['tv', 'android', 'ios'], 
                     'live_from_start': True,
                     'skip': ['webpage', 'configs']
                 }
-            },
-            # GEO-BYPASS SETTINGS
-            'geo_bypass': True,
-            'geo_bypass_country': country,
-            'xff': country,
-            
-            'headers': {
-                'X-Forwarded-For': f'{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}',
-                'Accept-Language': f'en-{country},en;q=0.9',
-                'Origin': 'https://www.youtube.com',
-                'Referer': 'https://www.youtube.com/',
-            },
+            }
+            # ভুয়া IP বা Geo-Bypass সরিয়ে ফেলা হয়েছে যাতে YouTube সন্দেহ না করে
         }
         
         try:
@@ -286,7 +277,7 @@ class YouTubePlaylistGenerator:
                 
                 logo_path = self.fetch_channel_logo(channel_id, clean_name)
                 
-                print(f"  ✅ Geo-bypass successful for {country}")
+                print(f"  ✅ Stream extracted successfully")
                 
                 return {
                     'status': 'live',
