@@ -11,6 +11,10 @@ from xml.etree import ElementTree as ET
 from xml.dom import minidom
 
 # ============= CONFIGURATION =============
+# আপনার Cloudflare Worker URL এখানে বসান (যেমন: 'https://yt-live.your-domain.workers.dev')
+# যদি খালি রাখেন (''), তবে সরাসরি YouTube-এর লিংক ব্যবহার হবে (যা শুধুমাত্র US নেটওয়ার্কে চলতে পারে)।
+CF_WORKER_URL = os.environ.get('CF_WORKER_URL', '')
+
 QUALITY_PROFILES = {
     'hd': {'min_height': 1080, 'suffix': '[HD]', 'priority': [1080]},
     'mobile': {'max_height': 480, 'suffix': '[Mobile]', 'priority': [480, 360]},
@@ -31,6 +35,23 @@ class YouTubePlaylistGenerator:
             if not os.path.exists(directory):
                 os.makedirs(directory)
                 print(f"📁 Created directory: {directory}/")
+    
+    def get_playlist_url(self, channel, stream_obj=None):
+        """Get stream URL - uses Cloudflare Worker if configured, else direct YouTube URL"""
+        if CF_WORKER_URL:
+            worker_base = CF_WORKER_URL.rstrip('/')
+            video_id = channel.get('video_id', '')
+            channel_id = channel.get('channel_id', '')
+            channel_url = channel.get('channel_url', '')
+            if video_id:
+                return f"{worker_base}/?v={video_id}"
+            elif channel_id:
+                return f"{worker_base}/?c={channel_id}"
+            elif channel_url:
+                return f"{worker_base}/?url={channel_url}"
+        if stream_obj and stream_obj.get('url'):
+            return stream_obj['url']
+        return channel.get('channel_url', 'https://youtube.com')
     
     def load_cache(self):
         """Load cached channel data"""
@@ -164,10 +185,7 @@ class YouTubePlaylistGenerator:
             'retries': 5,
             'extractor_args': {
                 'youtube': {
-                    # 'tv' ক্লায়েন্ট ব্যবহার করা হলো IP Lock এড়ানোর জন্য
-                    'player_client': ['tv', 'android', 'ios'], 
                     'live_from_start': True,
-                    'skip': ['webpage', 'configs']
                 }
             }
             # ভুয়া IP বা Geo-Bypass সরিয়ে ফেলা হয়েছে যাতে YouTube সন্দেহ না করে
@@ -293,7 +311,30 @@ class YouTubePlaylistGenerator:
                 }
                 
         except Exception as e:
-            print(f"  ⚠️ Error: {str(e)[:150]}")
+            print(f"  ⚠️ yt-dlp extraction error: {str(e)[:150]}")
+            # If CF_WORKER_URL is available, generate fallback entry using target URL directly!
+            if CF_WORKER_URL:
+                print(f"  🔄 Using Cloudflare Worker fallback for {url}")
+                channel_name = url.split('@')[-1].split('/')[0] if '@' in url else 'YouTube Channel'
+                clean_name = re.sub(r'[^\w\s-]', '', channel_name).strip()
+                country = self.detect_channel_country(channel_name)
+                return {
+                    'status': 'live',
+                    'video_id': '',
+                    'channel_id': '',
+                    'name': clean_name,
+                    'title': f"{channel_name} (Live Stream)",
+                    'channel_url': url,
+                    'streams': {
+                        'main': {
+                            'url': f"{CF_WORKER_URL.rstrip('/')}/?url={url}",
+                            'quality_tag': 'Live'
+                        }
+                    },
+                    'logo': f"https://www.youtube.com/@{channel_name}/avatar" if '@' in url else '',
+                    'is_live': True,
+                    'country': country
+                }
             return None
     
     def generate_individual_playlists(self, channels_data):
@@ -337,8 +378,9 @@ class YouTubePlaylistGenerator:
 # URL expires: ~{expiry_time} (refresh playlist if expired)
 
 """)
+                        stream_url = self.get_playlist_url(channel, main_stream)
                         f.write(f'#EXTINF:-1 tvg-id="{channel_id}"{logo_attr} tvg-name="{channel_name}" group-title="Individual",{channel_name} [{quality_tag}] 🔴 LIVE\n')
-                        f.write(main_stream['url'])
+                        f.write(stream_url)
                         f.write("\n")
                     
                     print(f"  ✅ LIVE ({country}): {filename}")
@@ -349,7 +391,7 @@ class YouTubePlaylistGenerator:
                         'id': channel_id,
                         'quality': quality_tag,
                         'status': 'live',
-                        'url': main_stream['url'],
+                        'url': stream_url,
                         'country': country
                     })
                 else:
@@ -576,9 +618,29 @@ class YouTubePlaylistGenerator:
                 
                 if main_stream:
                     q_tag = main_stream.get('quality_tag', '')
+                    stream_url = self.get_playlist_url(channel, main_stream)
                     playlists['main'].extend([
                         f'#EXTINF:-1 tvg-id="{channel_id}"{logo_attr} tvg-name="{channel_name}" group-title="{category}",{channel_name} [{q_tag}]',
-                        main_stream['url'], ""
+                        stream_url, ""
+                    ])
+                    
+                    # Populate HD, Mobile, and Audio playlists
+                    hd_stream = channel.get('streams', {}).get('hd') or main_stream
+                    playlists['hd'].extend([
+                        f'#EXTINF:-1 tvg-id="{channel_id}"{logo_attr} tvg-name="{channel_name}" group-title="{category}",{channel_name} [HD]',
+                        self.get_playlist_url(channel, hd_stream), ""
+                    ])
+                    
+                    mobile_stream = channel.get('streams', {}).get('mobile') or main_stream
+                    playlists['mobile'].extend([
+                        f'#EXTINF:-1 tvg-id="{channel_id}"{logo_attr} tvg-name="{channel_name}" group-title="{category}",{channel_name} [Mobile]',
+                        self.get_playlist_url(channel, mobile_stream), ""
+                    ])
+                    
+                    audio_stream = channel.get('streams', {}).get('audio') or main_stream
+                    playlists['audio'].extend([
+                        f'#EXTINF:-1 tvg-id="{channel_id}"{logo_attr} tvg-name="{channel_name}" group-title="{category}",{channel_name} [Audio]',
+                        self.get_playlist_url(channel, audio_stream), ""
                     ])
             elif channel.get('status') == 'offline':
                 stats['offline'] += 1

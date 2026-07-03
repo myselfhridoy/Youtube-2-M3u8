@@ -66,6 +66,8 @@ jobs:
           touch logos/.gitkeep channels/.gitkeep
 
       - name: Run playlist generator
+        env:
+          CF_WORKER_URL: ${{ vars.CF_WORKER_URL || secrets.CF_WORKER_URL }}
         run: |
           echo "Starting generation..."
           python generate.py
