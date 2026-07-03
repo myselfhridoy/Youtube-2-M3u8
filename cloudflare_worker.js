@@ -39,11 +39,14 @@ export default {
 
     let ytUrl = "";
     if (videoId) {
-      ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      ytUrl = `https://www.youtube.com/live/${videoId}`;
     } else if (channelId) {
       ytUrl = `https://www.youtube.com/channel/${channelId}/live`;
     } else if (targetUrl) {
       ytUrl = targetUrl;
+      if (ytUrl.includes("watch?v=")) {
+        ytUrl = ytUrl.replace("watch?v=", "live/");
+      }
     }
 
     try {
