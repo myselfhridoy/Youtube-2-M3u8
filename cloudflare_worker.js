@@ -3,12 +3,6 @@
  * 
  * এই স্ক্রিপ্টটি Cloudflare-এর ঢাকা (Dhaka BDIX) সার্ভার থেকে সরাসরি YouTube Live-এর 
  * ফ্রেশ m3u8 লিংক ফেচ করে দেয়, ফলে বাংলাদেশে কোনো 403 এরর বা বাফারিং হয় না।
- * 
- * ব্যবহারের নিয়ম:
- * - https://your-worker.workers.dev/?v=VIDEO_ID (যেমন: ?v=1M1aYd7jXsM)
- * - https://your-worker.workers.dev/?c=CHANNEL_ID (যেমন: ?c=UCN6sm8iHiPd0cnoUardDAnw)
- * - https://your-worker.workers.dev/?url=https://www.youtube.com/@JamunaTVbd/live
- * - সমস্যা হলে লিংকের শেষে &debug=1 যোগ করে চেক করা যাবে।
  */
 
 export default {
@@ -19,7 +13,6 @@ export default {
     const targetUrl = url.searchParams.get("url");
     const isDebug = url.searchParams.get("debug") === "1";
 
-    // ডিফল্ট হোম পেজ (চেক করার জন্য)
     if (!videoId && !channelId && !targetUrl) {
       return new Response(
         "📺 YouTube Live M3U8 Smart Proxy Worker is Running!\n\nUsage:\n  /?v=VIDEO_ID\n  /?c=CHANNEL_ID\n  /?url=YOUTUBE_LIVE_URL\n  Add &debug=1 for troubleshooting",
@@ -37,28 +30,38 @@ export default {
     }
 
     try {
-      // Cloudflare Edge (যেমন ঢাকা সার্ভার) থেকে YouTube পেজ ফেচ করা
-      // Cookie ও Consent হেডার দেওয়া হয়েছে যেন YouTube কোনো Bot/Consent পেজ না দেখায়
-      const response = await fetch(ytUrl, {
+      // প্রথম চেষ্টা: সাধারণ ক্লিন হেডার দিয়ে ফেচ করা (বট সন্দেহ বা 429 এড়াতে কোনো পুরনো স্ট্যাটিক কুকি ছাড়া)
+      let response = await fetch(ytUrl, {
         headers: {
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
           "Accept-Language": "en-US,en;q=0.9,bn;q=0.8",
-          "Cookie": "CONSENT=YES+cb.20210328-17-p0.en+FX+174; SOCS=CAESEwgDEgk0ODE3Nzk3MjQaAmVuIAEaBgiA_LyaBg;",
         },
         redirect: "follow",
       });
 
+      // যদি YouTube থেকে 429 (Rate Limit / CAPTCHA) বা Consent পেজ দেয়, তবে Googlebot User-Agent দিয়ে রিট্রাই করবে
+      if (response.status === 429 || response.url.includes("consent.youtube.com") || response.url.includes("sorry/index")) {
+        response = await fetch(ytUrl, {
+          headers: {
+            "User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Cookie": "SOCS=CAI;",
+          },
+          redirect: "follow",
+        });
+      }
+
       const html = await response.text();
 
-      // HTML পেজ থেকে hlsManifestUrl বের করা
+      // HTML পেজ থেকে hlsManifestUrl বা manifest.googlevideo.com লিংক বের করা
       let hlsUrl = "";
-      const hlsMatch = html.match(/hlsManifestUrl["']?\s*:\s*["'](https?:\/\/[^"'\s\\]+)/i);
+      const hlsMatch = html.match(/["']?hlsManifestUrl["']?\s*:\s*["']([^"']+)["']/i);
       if (hlsMatch && hlsMatch[1]) {
         hlsUrl = hlsMatch[1];
       } else {
-        // ব্যাকআপ চেক: manifest.googlevideo.com লিংক সরাসরি খুঁজবে (hls_variant বা hls_playlist উভয়ই)
-        const regexMatch = html.match(/(https?:\/\/manifest\.googlevideo\.com\/api\/manifest\/hls_(?:variant|playlist)\/[^"'\s\\]+)/i);
+        // ব্যাকআপ চেক: যেকোনো manifest.googlevideo.com লিংক (hls_variant বা hls_playlist উভয়ই)
+        const regexMatch = html.match(/(https?:\/\/[^"'\s\\]*manifest\.googlevideo\.com\/api\/manifest\/hls_(?:variant|playlist)\/[^"'\s\\]+)/i);
         if (regexMatch && regexMatch[1]) {
           hlsUrl = regexMatch[1];
         }
