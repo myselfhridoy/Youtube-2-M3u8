@@ -1,0 +1,12 @@
+#EXTM3U
+#EXT-X-VERSION:3
+# Channel: JamunaTVbd
+# ID: 
+# Quality: Live
+# Country: BD
+# Status: LIVE (as of 09:04 UTC)
+# Generated: 2026-07-06 09:04:53 UTC
+# URL expires: ~14:04 UTC (refresh playlist if expired)
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://www.youtube.com/@JamunaTVbd/avatar" tvg-name="JamunaTVbd" group-title="Individual",JamunaTVbd [Live] 🔴 LIVE
+https://yt-live.streambdiptv.workers.dev/?url=https://www.youtube.com/@JamunaTVbd/live
