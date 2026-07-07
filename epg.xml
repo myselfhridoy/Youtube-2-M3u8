@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tv generator-info-name="YouTube Live EPG Generator" date="20260707123104 ">
+<tv generator-info-name="YouTube Live EPG Generator" date="20260707172248 ">
   <channel id="UCN6sm8iHiPd0cnoUardDAnw">
     <display-name>Jamuna TV</display-name>
     <icon src="logos/UCN6sm8iHiPd0cnoUardDAnw.jpg"/>
   </channel>
-  <programme start="20260707123104 +0000" stop="20260707133104 +0000" channel="UCN6sm8iHiPd0cnoUardDAnw">
-    <title>জাতীয় সংসদের দ্বিতীয় অধিবেশন 2026-07-07 12:31</title>
+  <programme start="20260707172248 +0000" stop="20260707182248 +0000" channel="UCN6sm8iHiPd0cnoUardDAnw">
+    <title>JAMUNA TV LIVE | যমুনা টিভি লাইভ | সরাসরি যমুনা টিভি | LIVE TV | LIVE STREAMING | JAMUNA TV | TV 2026-07-07 17:22</title>
     <desc>Live YouTube stream from Jamuna TV</desc>
     <category>Live</category>
   </programme>
