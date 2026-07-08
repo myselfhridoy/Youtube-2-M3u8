@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tv generator-info-name="YouTube Live EPG Generator" date="20260708115044 ">
+<tv generator-info-name="YouTube Live EPG Generator" date="20260708164455 ">
   <channel id="UCN6sm8iHiPd0cnoUardDAnw">
     <display-name>Jamuna TV</display-name>
     <icon src="logos/UCN6sm8iHiPd0cnoUardDAnw.jpg"/>
   </channel>
-  <programme start="20260708115044 +0000" stop="20260708125044 +0000" channel="UCN6sm8iHiPd0cnoUardDAnw">
-    <title>🛑 LIVE: ''আর্জেন্টিনা নাকি ব্রাজিল''| FIFA World Cup 2026 | Argentina | Brazil | Jamuna TV 2026-07-08 11:50</title>
+  <programme start="20260708164455 +0000" stop="20260708174455 +0000" channel="UCN6sm8iHiPd0cnoUardDAnw">
+    <title>JAMUNA TV LIVE | যমুনা টিভি লাইভ | সরাসরি যমুনা টিভি | LIVE TV | LIVE STREAMING | JAMUNA TV | TV 2026-07-08 16:44</title>
     <desc>Live YouTube stream from Jamuna TV</desc>
     <category>Live</category>
   </programme>
