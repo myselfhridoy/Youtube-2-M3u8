@@ -1,0 +1,4 @@
+#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2200000
+http://boss.ddns.net/play/live.php?mac=10:27:BE:2F:4D:AF&stream=2095895&extension=m3u8
