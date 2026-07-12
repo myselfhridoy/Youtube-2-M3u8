@@ -1,7 +1,7 @@
 #EXTM3U
 #EXT-X-VERSION:3
-# Generated: 2026-07-12 03:34:29 UTC
+# Generated: 2026-07-12 07:31:34 UTC
 # Total channels: 1
 
-#EXTINF:-1 tvg-id="" tvg-logo="https://www.youtube.com/@JamunaTVbd/avatar" tvg-name="JamunaTVbd" group-title="General",JamunaTVbd [Live]
-https://yt-live.streambdiptv.workers.dev/?url=https://www.youtube.com/@JamunaTVbd/live
+#EXTINF:-1 tvg-id="UCN6sm8iHiPd0cnoUardDAnw" tvg-logo="logos/UCN6sm8iHiPd0cnoUardDAnw.jpg" tvg-name="Jamuna TV" group-title="General",Jamuna TV [720p]
+https://yt-live.streambdiptv.workers.dev/?v=scbTMNt0bak
