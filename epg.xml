@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tv generator-info-name="YouTube Live EPG Generator" date="20260714071332 ">
+<tv generator-info-name="YouTube Live EPG Generator" date="20260714113621 ">
   <channel id="UCN6sm8iHiPd0cnoUardDAnw">
     <display-name>Jamuna TV</display-name>
     <icon src="logos/UCN6sm8iHiPd0cnoUardDAnw.jpg"/>
   </channel>
-  <programme start="20260714071332 +0000" stop="20260714081332 +0000" channel="UCN6sm8iHiPd0cnoUardDAnw">
-    <title>Jamuna TV Live | যমুনা টিভি লাইভ | ২৪ ঘণ্টা সরাসরি সংবাদ 2026-07-14 07:13</title>
+  <programme start="20260714113621 +0000" stop="20260714123621 +0000" channel="UCN6sm8iHiPd0cnoUardDAnw">
+    <title>🛑 LIVE: জাতীয় সংসদের ২য় অধিবেশন 2026-07-14 11:36</title>
     <desc>Live YouTube stream from Jamuna TV</desc>
     <category>Live</category>
   </programme>
