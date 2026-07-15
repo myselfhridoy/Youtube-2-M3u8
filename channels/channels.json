@@ -1,14 +1,14 @@
 {
-  "generated": "2026-07-14T21:05:28.100277",
+  "generated": "2026-07-15T02:54:06.218876",
   "count": 1,
   "channels": [
     {
-      "name": "Jamuna TV",
-      "file": "channels/jamuna_tv.m3u8",
-      "id": "UCN6sm8iHiPd0cnoUardDAnw",
-      "quality": "720p",
+      "name": "JamunaTVbd",
+      "file": "channels/jamunatvbd.m3u8",
+      "id": "",
+      "quality": "Live",
       "status": "live",
-      "url": "https://yt-live.streambdiptv.workers.dev/?v=j6gG9kg0cfU",
+      "url": "https://yt-live.streambdiptv.workers.dev/?url=https://www.youtube.com/@JamunaTVbd/live",
       "country": "BD"
     }
   ]
