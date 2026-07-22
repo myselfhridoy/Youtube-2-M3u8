@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tv generator-info-name="YouTube Live EPG Generator" date="20260722073810 ">
+<tv generator-info-name="YouTube Live EPG Generator" date="20260722115230 ">
   <channel id="UCN6sm8iHiPd0cnoUardDAnw">
     <display-name>Jamuna TV</display-name>
     <icon src="logos/UCN6sm8iHiPd0cnoUardDAnw.jpg"/>
   </channel>
-  <programme start="20260722073810 +0000" stop="20260722083810 +0000" channel="UCN6sm8iHiPd0cnoUardDAnw">
-    <title>Jamuna TV Live | যমুনা টিভি লাইভ | ২৪ ঘণ্টা সরাসরি সংবাদ 2026-07-22 07:38</title>
+  <programme start="20260722115230 +0000" stop="20260722125230 +0000" channel="UCN6sm8iHiPd0cnoUardDAnw">
+    <title>Jamuna TV Live | যমুনা টিভি লাইভ | ২৪ ঘণ্টা সরাসরি সংবাদ 2026-07-22 11:52</title>
     <desc>Live YouTube stream from Jamuna TV</desc>
     <category>Live</category>
   </programme>
