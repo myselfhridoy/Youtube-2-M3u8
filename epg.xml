@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tv generator-info-name="YouTube Live EPG Generator" date="20260723211409 ">
+<tv generator-info-name="YouTube Live EPG Generator" date="20260724032033 ">
   <channel id="">
     <display-name>JamunaTVbd</display-name>
     <icon src="https://www.youtube.com/@JamunaTVbd/avatar"/>
   </channel>
-  <programme start="20260723211409 +0000" stop="20260723221409 +0000" channel="">
+  <programme start="20260724032033 +0000" stop="20260724042033 +0000" channel="">
     <title>JamunaTVbd (Live Stream)</title>
     <desc>Live YouTube stream from JamunaTVbd</desc>
     <category>Live</category>
